@@ -2,6 +2,7 @@
 
 var http = require('http');
 var url = require('url');
+var fileSystem= require('fs')
 var moduleTest = require('./moduleTest')
 //var https=require('https')
 
@@ -14,5 +15,19 @@ http.createServer(function (req, res) {
   if(typeof q.name !== 'undefined' && q.name !== null) {
     query=q.name
   }
-  res.end('<h3> by swapnil</h3><p>' + moduleTest.currentDate()+" "+query+"</p></html>");
+  res.write('<h3> by swapnil</h3><p>' + moduleTest.currentDate()+" "+query+"</p>");
+  fileSystem.readFile("test.txt",'utf8', function (err,data){
+res.write("<p bgcolor=\"#FF0000\">"+data+"</p></html>")
+res.end()
+})
+
 }).listen(8080);
+
+
+function readFile(err,data){
+  if(err)
+    return "Error reading file";
+    else{
+      return data;
+    }
+}
