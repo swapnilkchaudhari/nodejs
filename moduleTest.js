@@ -1,3 +1,3 @@
-exports.currentDate = function(){
+exports.currentDate = function () {
     return Date()
 }
