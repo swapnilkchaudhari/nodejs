@@ -1,4 +1,21 @@
-utf8appended textappended textappended textappended textappended textappended text
+This test file.
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
+appended text
 appended text
 appended text
 appended text
