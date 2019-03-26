@@ -19,10 +19,11 @@ http.createServer(function (req, res) {
   }
   res.write('<h3> by swapnil</h3><p>' + moduleTest.currentDate() + " " + query + "</p>");
   showCustomObject(res)
+  arrayOperation(res)
   var fileName = "test.txt"
   console.log("Saved in 0 " + fileName)
   fileSystem.readFile(fileName, 'utf8', function (err, data) {
-    res.write("<p bgcolor=\"#FF0000\">" + data + "</p></body></html>")
+    res.write("<p style=\"background-color:#FF0000;\">" + data + "</p></body></html>")
     console.log("Saved in 1 " + fileName)
     fileSystem.appendFile(fileName, '\nappended text', function (err) {
       console.log("Saved in 2 " + fileName)
@@ -60,3 +61,11 @@ var customObject= {
       return firstName +' '+ lastName +' aged '+publicationCount;
   }
 };
+
+function arrayOperation(res){
+  res.write('<div style="background-color:powderblue;"><h4>Array operations</h4>')
+  var array =[20,91,12,13]
+  res.write('<p>Before sorting:'+array.join(', ')+"</p>")
+  array.sort(function(a,b){return a-b})
+  res.write('<p>After sorting:'+array.join(', ')+"</p></div>")
+}
