@@ -8,7 +8,6 @@ var CustomObjectModule=require('./customObject')
 //var https=require('https')
 
 http.createServer(function (req, res) {
-  console.log("Saved in 00 " + fileName)
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.write("<html><body><h1>Hello World!</h1>")
   res.write("<h2>Request Url is " + req.url + "</h2>")
@@ -20,7 +19,8 @@ http.createServer(function (req, res) {
   res.write('<h3> by swapnil</h3><p>' + moduleTest.currentDate() + " " + query + "</p>");
   showCustomObject(res)
   arrayOperation(res)
-  var fileName = "test.txt"
+  testAsyncOperation(res)
+  /*var fileName = "test.txt"
   console.log("Saved in 0 " + fileName)
   fileSystem.readFile(fileName, 'utf8', function (err, data) {
     res.write("<p style=\"background-color:#FF0000;\">" + data + "</p></body></html>")
@@ -33,7 +33,7 @@ http.createServer(function (req, res) {
         console.log("Saved in " + fileName)
     })
     res.end()
-  })
+  })*/
 
 }).listen(8080);
 
@@ -68,4 +68,40 @@ function arrayOperation(res){
   res.write('<p>Before sorting:'+array.join(', ')+"</p>")
   array.sort(function(a,b){return a-b})
   res.write('<p>After sorting:'+array.join(', ')+"</p></div>")
+}
+
+function testAsyncOperation(res){
+  res.write('<div style="background-color:#FFFF00;"><h4>Async operations</h4>')
+  var list=[1,2,3,4,5,6]
+  var result=syncOdds(list)
+  res.write('<p>Synchronous odds are:'+result.join(", ")+'</p>')
+  
+  asyncOdds(list,function(error,data){
+    if(error==null){
+      res.write('<p>Asynchronous odds are:'+data.join(", ")+'</p>')
+    }else{
+      res.write('<p>Asynchronous odds error: '+error.message +' data:'+data.join(", ")+'</p>')
+    }
+    res.write("</div></body></html>")
+    res.end()
+  })
+}
+
+function syncOdds(list){
+  return list.filter(function(value){
+    return value % 2 !=0
+  })
+}
+
+function asyncOdds(list,callback){
+
+  setTimeout(function(){
+    var result= list.filter(function(value){
+      return value % 2 !=0
+    })
+    var error=null
+    if(Math.random()<0.5)
+      error=new Error("Randomised error","Randomised error message")
+    callback(error,result)
+  },2000)
 }
