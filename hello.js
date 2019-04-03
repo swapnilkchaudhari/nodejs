@@ -5,6 +5,7 @@ var url = require('url');
 var fileSystem = require('fs')
 var moduleTest = require('./moduleTest')
 var CustomObjectModule=require('./customObject')
+CartClass=require("./exportClass")
 //var https=require('https')
 
 http.createServer(function (req, res) {
@@ -19,6 +20,8 @@ http.createServer(function (req, res) {
   res.write('<h3> by swapnil</h3><p>' + moduleTest.currentDate() + " " + query + "</p>");
   showCustomObject(res)
   arrayOperation(res)
+  testGlobal(res)
+  testClass(res)
   testAsyncOperation(res)
   /*var fileName = "test.txt"
   console.log("Saved in 0 " + fileName)
@@ -46,6 +49,24 @@ function readFile(err, data) {
   }
 }
 
+function testClass(res){
+  res.write('<div style="background-color:#FF00FF;"><h4>Class</h4>')
+  var cart1=new CartClass()
+  var cart2=new CartClass()
+  cart1.addItem("mobile",10)
+  cart1.addItem("cover",1)
+  console.log(cart1)
+  res.write("<br>testClass() cart1 total"+cart1.total()+"</br>")
+  res.write("<br>testClass() cart2 total"+cart2.total()+"</br>")
+  cart2.addItem("cover",1)
+  console.log(cart2)
+  res.write("<br>testClass() cart2 total"+cart2.total()+"</br>")
+  res.write("</div>")
+}
+
+function testGlobal(res){
+  res.write("testGlobal() "+globalFunction())
+}
 function showCustomObject(res){
   res.write("CustomObject firstName="+CustomObjectModule.customObject.firstName);
   //res.write("CustomObject firstName="+customObject.firstName);
