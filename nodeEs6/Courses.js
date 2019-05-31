@@ -1,8 +1,10 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
+const Logger = require('./Logger')
 
 const server = express()
 server.use(express.json())
+server.use(Logger.log)
 server.get("/courses/all", getAll)
 server.get("/courses/get/:id", getCourse)
 server.put("/courses/add", addCourse)
@@ -18,7 +20,8 @@ var allCourses = [{ id: 1, name: 'OS', price: 20 },
 
 //Returns all courses
 function getAll(req, res) {
-    res.send(allCourses)
+    sendResponse(res, 200, false, "Success", allCourses)
+    // res.send(allCourses)
 }
 
 function getCourse(req, res) {
@@ -27,13 +30,13 @@ function getCourse(req, res) {
     })
     //console.log(req.params)
     let result = Joi.validate(req.params, schema)
-    console.log(result)
+    //console.log(result)
     if (result.error) {
         sendResponse(res, 200, true, "Invalid input")
         return
     } else {
         let retValue = findMatchingCourse(result.value.id)
-        console.log(retValue)
+        //console.log(retValue)
 
         if (retValue) {
             sendResponse(res, 200, false, "Success", retValue)
@@ -58,7 +61,7 @@ function addCourse(req, res) {
     })
     //console.log(req)
     let result = Joi.validate(req.body, schema)
-    console.log(result)
+    //console.log(result)
     if (result.error) {
         sendResponse(res, 200, true, "Invalid input")
     } else {
@@ -78,7 +81,7 @@ function deleteCourse(req, res) {
     })
     //console.log(req.params)
     let result = Joi.validate(req.params, schema)
-    console.log(result)
+    //console.log(result)
     if (result.error) {
         sendResponse(res, 200, true, "Invalid input")
         return
@@ -91,7 +94,7 @@ function deleteCourse(req, res) {
                 break
             }
         }
-        console.log(allCourses)
+        //console.log(allCourses)
         if (isFound)
             sendResponse(res, 200, false, "Successfully deleted course.")
         else
@@ -103,10 +106,13 @@ function sendResponse(res, statusCode, isError, message, body) {
     let response
     if (isError) {
         response = { msgTyp: "E", message: message }
-    } else {
+    } else if (body) {
         response = { msgTyp: "S", message: message, data: body }
+    } else {
+        response = { msgTyp: "S", message: message }
     }
     //res.removeHeader('X-Powered-By')
     res.statusCode = statusCode
     res.send(response)
+    console.log("Response", response)
 }
