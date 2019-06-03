@@ -2,6 +2,7 @@ const express = require('express')
 const Logger = require('./Logger')
 const courses = require('./models/Courses')
 const expressDmo = require('./models/expressDemo')
+const movies = require('./models/Movies')
 
 const server = express()
 server.disable('x-powered-by')
@@ -10,6 +11,7 @@ server.use(express.json())
 server.use(Logger.log)
 server.use("/courses", courses)
 server.use("/express/demo",expressDmo)
+server.use("/promise/demo",movies)
 
 server.listen(3001, () => {
     console.log("Server started on port 3001.")
