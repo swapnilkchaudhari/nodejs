@@ -1,18 +1,11 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
-const Logger = require('./Logger')
+const router = express.Router()
 
-const server = express()
-server.use(express.json())
-server.use(Logger.log)
-server.get("/courses/all", getAll)
-server.get("/courses/get/:id", getCourse)
-server.put("/courses/add", addCourse)
-server.delete("/courses/delete/:id", deleteCourse)
-
-server.listen(3001, () => {
-    console.log("Server started on port 3001.")
-})
+router.get("/all", getAll)
+router.get("/get/:id", getCourse)
+router.put("/add", addCourse)
+router.delete("/delete/:id", deleteCourse)
 
 var allCourses = [{ id: 1, name: 'OS', price: 20 },
 { id: 2, name: 'Network', price: 30 },
@@ -116,3 +109,5 @@ function sendResponse(res, statusCode, isError, message, body) {
     res.send(response)
     console.log("Response", response)
 }
+
+module.exports = router

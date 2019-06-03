@@ -1,25 +1,20 @@
 const express = require('express')
 const Joi = require('@hapi/joi')
-//bodyParser = require("body-parser")
+const expressRouter = express.Router();
 
-const application = express();
-application.use(express.json())
-application.disable('x-powered-by')
-//application.use(bodyParser);
-
-application.post('/express/demo', (req, res) => {
+expressRouter.post('/', (req, res) => {
     console.log(req.body)
     // if (!req.body || req.body.index.length===0) {
     //     sendResponse(res, 400, "Invalid request")
     //     return
     // }
-    const schema=Joi.object().keys({
-        index:Joi.number().integer().min(0).max(50),
-        name:Joi.string().min(3).required()
+    const schema = Joi.object().keys({
+        index: Joi.number().integer().min(0).max(50),
+        name: Joi.string().min(3).required()
     })
-    let result=Joi.validate(req.body,schema)
+    let result = Joi.validate(req.body, schema)
     console.log(result)
-    if(result.error){
+    if (result.error) {
         sendResponse(res, 400, "Invalid request")
         return
     }
@@ -30,12 +25,14 @@ application.post('/express/demo', (req, res) => {
     sendResponse(res, 200, reply)
 })
 
-application.listen(3000, () => {
-    console.log("Server started at port 3000")
-})
+// application.listen(3000, () => {
+//     console.log("Server started at port 3000")
+// })
 
 function sendResponse(res, statusCode, body) {
     //res.removeHeader('X-Powered-By')
     res.statusCode = statusCode
     res.send(body)
 }
+
+module.exports = expressRouter
