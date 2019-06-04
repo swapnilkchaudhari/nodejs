@@ -2,23 +2,32 @@ const express = require('express')
 const router = express.Router()
 router.get("/", sendEmail2Customer)
 
-function sendEmail2Customer(req, res) {
+async function sendEmail2Customer(req, res) {
 
-    let email
-    getCustomer(1)
-        .then((customer) => {
-            console.log("Customer", customer)
-            if (customer.isGold) {
-                email = customer.email
-                return getTopMovies()
-            } else {
-                throw new Error("Regular customer")
-            }
-        }).then((movies) => {
-            console.log('Top movies: ', movies);
-            return sendEmail(email, movies)
-        }).then((message) => sendResponse(res, 200, false, message))
-        .catch((error) => sendResponse(res, 400, true, error.message))
+    let customer = await getCustomer(1)
+    if (customer.isGold) {
+        let movies = await getTopMovies()
+        let message = await sendEmail(customer.email, movies)
+        sendResponse(res, 200, false, message)
+    } else {
+        sendResponse(res, 400, true, "Regular customer")
+    }
+    //             email = customer.email
+    // let email
+    // getCustomer(1)
+    //     .then((customer) => {
+    //         console.log("Customer", customer)
+    //         if (customer.isGold) {
+    //             email = customer.email
+    //             return getTopMovies()
+    //         } else {
+    //             throw new Error("Regular customer")
+    //         }
+    //     }).then((movies) => {
+    //         console.log('Top movies: ', movies);
+    //         return sendEmail(email, movies)
+    //     }).then((message) => sendResponse(res, 200, false, message))
+    //     .catch((error) => sendResponse(res, 400, true, error.message))
 }
 
 function sendResponse(res, statusCode, isError, message, body) {
@@ -39,7 +48,7 @@ function sendResponse(res, statusCode, isError, message, body) {
 const result = {
     id: 1,
     name: 'Mosh Hamedani',
-    isGold: true,
+    isGold: false,
     email: 'a@a.com'
 }
 
