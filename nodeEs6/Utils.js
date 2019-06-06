@@ -13,4 +13,4 @@ function sendResponse(res, statusCode, isError, message, body) {
     console.log("Response", response)
 }
 
-module.exports.sendResponse=sendResponse
+module.exports.sendResponse = sendResponse
